@@ -27,31 +27,37 @@ const renderCountry = function(data, className = '') {
 }
 
 // the old school way of using AJAX calls
-const getCountryAndNeighbour = function(country){
-    const request = new XMLHttpRequest();
-    request.open('GET', `https://restcountries.com/v2/name/${country}`);
-    request.send();
+// const getCountryAndNeighbour = function(country){
+//     const request = new XMLHttpRequest();
+//     request.open('GET', `https://restcountries.com/v2/name/${country}`);
+//     request.send();
 
-    request.addEventListener('load', function() {
-        const [data] = JSON.parse(this.responseText);
-        console.log(data);
+//     request.addEventListener('load', function() {
+//         const [data] = JSON.parse(this.responseText);
+//         console.log(data);
         
-        renderCountry(data);
+//         renderCountry(data);
 
-        // Get neighbour
-        const neighbour = data.borders?.[0];
-        //neighbour call
-        const request2 = new XMLHttpRequest();
-        request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
-        request2.send();
+//         // Get neighbour
+//         const neighbour = data.borders?.[0];
+//         //neighbour call
+//         const request2 = new XMLHttpRequest();
+//         request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
+//         request2.send();
 
-        request2.addEventListener('load', function() {
-            const data2 = JSON.parse(this.responseText);
-            console.log(data2);
+//         request2.addEventListener('load', function() {
+//             const data2 = JSON.parse(this.responseText);
+//             console.log(data2);
 
-            renderCountry(data2, 'neighbour')
-        })
-    });
-}
+//             renderCountry(data2, 'neighbour')
+//         })
+//     });
+// }
 
-getCountryAndNeighbour('austria');
+// getCountryAndNeighbour('austria');
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Fetch API the modern way of Calling API's
+
+const request = fetch(`https://restcountries.com/v2/name/canada`);
+
