@@ -62,9 +62,20 @@ const renderCountry = function(data, className = '') {
 const request = fetch(`https://restcountries.com/v2/name/canada`);
 
 const getCountry = function(country) {
+    // Country 
     fetch(`https://restcountries.com/v2/name/${country}`)
     .then(response => response.json()) // handling fullfilled promise
-    .then(data => renderCountry(data[0]));
+    .then(data => {
+        renderCountry(data[0])
+        const neighbour = data[0].borders[0]
+
+        if(!neighbour) return;
+
+    // Bordering Country
+        return fetch(`https://restcountries.com/v2/alpha/${neighbour}`)
+    }) // ALWAYS RETURN THE PROMISE THEN HANDLE IT OUTSIDE THE CHAIN ////////////////////////////////////////
+    .then(response => response.json())
+    .then(data => renderCountry(data, 'neighbour'));  
 };
 
-getCountry('france');
+getCountry('usa');
