@@ -25,7 +25,7 @@ const renderCountry = function(data, className = '') {
         countriesContainer.insertAdjacentHTML('beforeend', html);
         countriesContainer.style.opacity = 1;
 }
-
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // the old school way of using AJAX calls
 // const getCountryAndNeighbour = function(country){
 //     const request = new XMLHttpRequest();
@@ -61,3 +61,10 @@ const renderCountry = function(data, className = '') {
 
 const request = fetch(`https://restcountries.com/v2/name/canada`);
 
+const getCountry = function(country) {
+    fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(response => response.json()) // handling fullfilled promise
+    .then(data => renderCountry(data[0]));
+};
+
+getCountry('france');
