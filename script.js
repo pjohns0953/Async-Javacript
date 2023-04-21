@@ -9,6 +9,7 @@ const countriesContainer = document.querySelector('.countries');
 
 // Render Country and data
 
+
 const renderCountry = function(data, className = '') {
     const html = `
         <article class="country ${className}">
@@ -23,9 +24,21 @@ const renderCountry = function(data, className = '') {
         </article>`;
 
         countriesContainer.insertAdjacentHTML('beforeend', html);
-        countriesContainer.style.opacity = 1;
+    }
+
+const renderError = function(msg) {
+    countriesContainer.insertAdjacentText('beforeend', msg);
 }
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const getJson = function(url, errorMsg = 'Something went wrong!') {
+    return fetch(url)
+    .then(response => { // Handles either the fullfilled or rejected promise
+        if(!response.ok) throw new Error(`${errorMsg} (${response.status})`);  // returns a rejected promise if country is not found
+        
+        return response.json();
+    });
+}
+ /*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // the old school way of using AJAX calls
 // const getCountryAndNeighbour = function(country){
 //     const request = new XMLHttpRequest();
@@ -55,27 +68,36 @@ const renderCountry = function(data, className = '') {
 // }
 
 // getCountryAndNeighbour('austria');
+*/
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Fetch API the modern way of Calling API's
-
-const request = fetch(`https://restcountries.com/v2/name/canada`);
-
 const getCountry = function(country) {
     // Country 
-    fetch(`https://restcountries.com/v2/name/${country}`)
-    .then(response => response.json()) // handling fullfilled promise
+    getJson(`https://restcountries.com/v2/name/${country}`, 'Country not found!')
+    
     .then(data => {
-        renderCountry(data[0])
-        const neighbour = data[0].borders[0]
+        renderCountry(data[0]);
+        const neighbour = data[0].borders[0];
+        
+        if(!neighbour) throw new Error ('No neighbouring countries found!')
 
-        if(!neighbour) return;
-
+        return getJson(`https://restcountries.com/v2/alpha/${neighbour}`, 'Country not found!')
+     })  // ALWAYS RETURN THE PROMISE THEN HANDLE IT OUTSIDE THE CHAIN //////////////////////////////////////// 
+        
     // Bordering Country
-        return fetch(`https://restcountries.com/v2/alpha/${neighbour}`)
-    }) // ALWAYS RETURN THE PROMISE THEN HANDLE IT OUTSIDE THE CHAIN ////////////////////////////////////////
-    .then(response => response.json())
-    .then(data => renderCountry(data, 'neighbour'));  
+    .then(data => renderCountry(data, 'neighbour'))
+    .catch(err => { // catches rejected promises so there are no uncaught errors withing the promise chain
+        console.error(`${err} 💢💢💢`)
+        renderError(`Something went wrong 💢💢💢  ${err.message}. Try again!`)
+    })
+    .finally(() => { // the finally method is always called regardless of fullfillment or rejection of the promise
+        countriesContainer.style.opacity = 1;
+    })
 };
 
-getCountry('usa');
+btn.addEventListener('click', function() {
+    getCountry('Greenland');
+});
+
+// getCountry(`fort kickass`);
+
