@@ -96,7 +96,7 @@ const getCountry = function(country) {
 };
 
 btn.addEventListener('click', function() {
-    getCountry('Greenland');
+    getCountry('canada');
 });
 
 // getCountry(`fort kickass`);
