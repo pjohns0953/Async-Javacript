@@ -1,22 +1,39 @@
-'use strict';
+`use strict`;
 
-const data1 = [52.508,  13.381];
+const data1 = [43.861, -79.669];
 const data2 = [19.037, 72.873];
 const data3 = [-33.933, 18.474];
 
-const getCity = function(url, err) {
-    return fetch(url)
-    .then(response => {
-        if(!response.ok) throw new Error ('You must be in space');
-        return response.json()});
+
+
+const whereAmI = function (lat, lng) {
+    fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`)
+    .then(res => {
+        if(!res.ok) throw new Error(`You must be in space`)
+        return res.json()})
+    .then(data => {
+        console.log(data);
+        console.log(`You are in ${data.city}, ${data.countryName}`);
+
+        return fetch(`https://restcountries.com/v2/name/${data.countryName}`);
+    })
+    .then(res => {
+        console.log(res)
+        return res.json();
+    })
+    .then(data => {
+        console.log(data[0].name);
+        renderCountry(data[0]);
+        
+        countriesContainer.style.opacity = 1;
+    })
+    .catch(err => console.log(`Error coordinates not found ${err.message}`));
+
 }
 
-const whereAmI = function(lat, lng) {
-    getCity(`https://geocode.xyz/${lat},${lng}?geoit=json.`)
-    .then(data => console.log(`You are in ${data.city}`))
-    .catch(err => console.log(err.message));
-}
 
 whereAmI(...data1);
 whereAmI(...data2);
 whereAmI(...data3);
+
+
