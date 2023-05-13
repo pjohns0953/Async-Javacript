@@ -5,7 +5,7 @@ const data2 = [19.037, 72.873];
 const data3 = [-33.933, 18.474];
 
 
-
+// Coding Challenge 1
 const whereAmI = function (lat, lng) {
     fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`)
     .then(res => {
@@ -36,4 +36,15 @@ whereAmI(...data1);
 whereAmI(...data2);
 whereAmI(...data3);
 
+// Coding Challenge 2
 
+const createImage = function(imgPath) {
+    return new Promise((resolve , reject) => {
+        const img = document.createElement('img');
+        img.src = 'imgPath'
+
+        img.addEventListener('load', function(){
+
+        })
+    })
+}
