@@ -7,9 +7,7 @@ const countriesContainer = document.querySelector('.countries');
 
 ///////////////////////////////////////
 
-// Render Country and data
-
-
+/* Render Country and data
 const renderCountry = function(data, className = '') {
     const html = `
         <article class="country ${className}">
@@ -24,120 +22,125 @@ const renderCountry = function(data, className = '') {
         </article>`;
 
         countriesContainer.insertAdjacentHTML('beforeend', html);
+        countriesContainer.style.opacity = 1;
     }
 
-// const renderError = function(msg) {
-//     countriesContainer.insertAdjacentText('beforeend', msg);
-// }
-
-// const getJson = function(url, errorMsg = 'Something went wrong!') {
-//     return fetch(url)
-//     .then(response => { // Handles either the fullfilled or rejected promise
-//         if(!response.ok) throw new Error(`${errorMsg} (${response.status})`);  // returns a rejected promise if country is not found
-        
-//         return response.json();
-//     });
-// }
-//  /*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// // the old school way of using AJAX calls
-// // const getCountryAndNeighbour = function(country){
-// //     const request = new XMLHttpRequest();
-// //     request.open('GET', `https://restcountries.com/v2/name/${country}`);
-// //     request.send();
-
-// //     request.addEventListener('load', function() {
-// //         const [data] = JSON.parse(this.responseText);
-// //         console.log(data);
-        
-// //         renderCountry(data);
-
-// //         // Get neighbour
-// //         const neighbour = data.borders?.[0];
-// //         //neighbour call
-// //         const request2 = new XMLHttpRequest();
-// //         request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
-// //         request2.send();
-
-// //         request2.addEventListener('load', function() {
-// //             const data2 = JSON.parse(this.responseText);
-// //             console.log(data2);
-
-// //             renderCountry(data2, 'neighbour')
-// //         })
-// //     });
-// // }
-
-// // getCountryAndNeighbour('austria');
-// */
-
-// // Fetch API the modern way of Calling API's
-// const getCountry = function(country) {
-//     // Country 
-//     getJson(`https://restcountries.com/v2/name/${country}`, 'Country not found!')
+const renderError = function(msg) {
+    countriesContainer.insertAdjacentText('beforeend', msg);
+    countriesContainer.style.opacity = 1;
     
-//     .then(data => {
-//         renderCountry(data[0]);
-//         const neighbour = data[0].borders[0];
+}
+
+
+const getJson = function(url, errorMsg = 'Something went wrong!') {
+    return fetch(url)
+    .then(response => { // Handles either the fullfilled or rejected promise
+        if(!response.ok) throw new Error(`${errorMsg} (${response.status})`);  // returns a rejected promise if country is not found
         
-//         if(!neighbour) throw new Error ('No neighbouring countries found!')
+        return response.json();
+    });
+}
+*/
 
-//         return getJson(`https://restcountries.com/v2/alpha/${neighbour}`, 'Country not found!')
-//      })  // ALWAYS RETURN THE PROMISE THEN HANDLE IT OUTSIDE THE CHAIN //////////////////////////////////////// 
+/* the old school way of using AJAX calls
+const getCountryAndNeighbour = function(country){
+    const request = new XMLHttpRequest();
+    request.open('GET', `https://restcountries.com/v2/name/${country}`);
+    request.send();
+
+    request.addEventListener('load', function() {
+        const [data] = JSON.parse(this.responseText);
+        console.log(data);
         
-//     // Bordering Country
-//     .then(data => renderCountry(data, 'neighbour'))
-//     .catch(err => { // catches rejected promises so there are no uncaught errors withing the promise chain
-//         console.error(`${err} 💢💢💢`)
-//         renderError(`Something went wrong 💢💢💢  ${err.message}. Try again!`)
-//     })
-//     .finally(() => { // the finally method is always called regardless of fullfillment or rejection of the promise
-//         countriesContainer.style.opacity = 1;
-//     })
-// };
+        renderCountry(data);
 
-// btn.addEventListener('click', function() {
-//     getCountry('canada');
-// });
+        // Get neighbour
+        const neighbour = data.borders?.[0];
+        //neighbour call
+        const request2 = new XMLHttpRequest();
+        request2.open('GET', `https://restcountries.com/v2/alpha/${neighbour}`);
+        request2.send();
 
-// getCountry(`fort kickass`);
+        request2.addEventListener('load', function() {
+            const data2 = JSON.parse(this.responseText);
+            console.log(data2);
 
-// Event Loop in Practice ////////////////////////////////////////////////////////////////////////////////////////
+            renderCountry(data2, 'neighbour')
+        })
+    });
+}
 
-// console.log('Test Start'); // 1st log due to top level code and syncronous behaviour
-// setTimeout(() => console.log('0 sec timer'), 0); // 4th to log because the callback function goes to the callback queue and has least priority
-// Promise.resolve('Resolved Promise 1') // 3rd to log due to micro-tasks queue that promises are sent to.
-//     .then(res => console.log(res));
+getCountryAndNeighbour('austria');
+*/
 
-// Promise.resolve('resolved promise 2')
-//     .then(res => {
-//         for (let i = 0; i < 1000000000; i++){};
-//         console.log(res)
-//     });
-// console.log('test end'); // 2nd log due to top level code and syncrounous behaviour 
+/* Fetch API the modern way of Calling API's
+const getCountry = function(country) {
+    // Country 
+    getJson(`https://restcountries.com/v2/name/${country}`, 'Country not found!')
+    
+    .then(data => {
+        renderCountry(data[0]);
+        const neighbour = data[0].borders[0];
+        
+        if(!neighbour) throw new Error ('No neighbouring countries found!')
 
-// const lottery = new Promise(function(resolve, reject) {
-//     console.log('Lottery Draw is taking place')
-//     setTimeout(function() {
-//         if(Math.random() >= 0.5){
-//             resolve('You WIN 🤑💰');
-//         } else {
-//             reject(new Error('You lose 💔'));
-//         }
-//     }, 2000);
-// });
+        return getJson(`https://restcountries.com/v2/alpha/${neighbour}`, 'Country not found!')
+     })  // ALWAYS RETURN THE PROMISE THEN HANDLE IT OUTSIDE THE CHAIN //////////////////////////////////////// 
+        
+    // Bordering Country
+    .then(data => renderCountry(data, 'neighbour'))
+    .catch(err => { // catches rejected promises so there are no uncaught errors withing the promise chain
+        console.error(`${err} 💢💢💢`)
+        renderError(`Something went wrong 💢💢💢  ${err.message}. Try again!`)
+    })
+    .finally(() => { // the finally method is always called regardless of fullfillment or rejection of the promise
+        countriesContainer.style.opacity = 1;
+    })
+};
 
-// lottery.then(res => console.log(res))
-//     .catch(err => console.log(err));
+btn.addEventListener('click', function() {
+    getCountry('canada');
+});
 
-// const wait = seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000));
+getCountry(`fort kickass`);
+*/
 
-// wait(2).then(() => {
-//     console.log('I waited for two seconds')
-//     return wait(1);
-// }).then(() => console.log('I waited for 1 second'));
+/* Event Loop in Practice
+console.log('Test Start'); // 1st log due to top level code and syncronous behaviour
+setTimeout(() => console.log('0 sec timer'), 0); // 4th to log because the callback function goes to the callback queue and has least priority
+Promise.resolve('Resolved Promise 1') // 3rd to log due to micro-tasks queue that promises are sent to.
+    .then(res => console.log(res));
 
+Promise.resolve('resolved promise 2')
+    .then(res => {
+        for (let i = 0; i < 1000000000; i++){};
+        console.log(res)
+    });
+console.log('test end'); // 2nd log due to top level code and syncrounous behaviour 
 
+const lottery = new Promise(function(resolve, reject) {
+    console.log('Lottery Draw is taking place')
+    setTimeout(function() {
+        if(Math.random() >= 0.5){
+            resolve('You WIN 🤑💰');
+        } else {
+            reject(new Error('You lose 💔'));
+        }
+    }, 2000);
+});
 
+lottery.then(res => console.log(res))
+    .catch(err => console.log(err));
+
+const wait = seconds => new Promise(resolve => setTimeout(resolve, seconds * 1000));
+
+wait(2).then(() => {
+    console.log('I waited for two seconds')
+    return wait(1);
+}).then(() => console.log('I waited for 1 second'));
+*/
+ 
+/* Where Am I app
 const getPosition = function() {
     return new Promise((resolve, reject) => 
         navigator.geolocation.getCurrentPosition(resolve, reject)
@@ -178,3 +181,50 @@ const whereAmI = function () {
 }
 
 btn.addEventListener('click', whereAmI)
+*/
+
+/* Async/Await
+
+const getPosition = function() {
+    return new Promise((resolve, reject) => 
+        navigator.geolocation.getCurrentPosition(resolve, reject)
+)};
+
+const whereAmI = async function() {
+    // Geolocation
+    try {
+        const pos = await getPosition();
+        const {latitude: lat, longitude: lng} = pos.coords;
+
+        // Reverse geocoding
+        const resGeo = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
+        const dataGeo = await resGeo.json();
+        console.log(dataGeo);
+
+        // Counry data
+        const res = await fetch(`https://restcountries.com/v2/name/${dataGeo.countryName}`);
+        // console.log(res);
+        const data = await res.json();
+        renderCountry(data[0]);
+        return `You are in ${dataGeo.locality}`
+    } 
+    catch(err) {
+        renderError(`Something happened!? ${err.message}`);
+    }
+} 
+whereAmI().then(city => console.log(city));
+console.log('FIRST');
+
+// iffy function
+
+(async function() {
+    try {
+        const city = whereAmI();
+        console.log(`2: ${city}`);
+    }  catch(err) {
+        console.log(err.message);
+    }
+    console.log('3: finished getting location');
+})();
+*/
+
