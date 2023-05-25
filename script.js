@@ -30,7 +30,7 @@ const renderError = function(msg) {
     countriesContainer.style.opacity = 1;
     
 }
-
+*/
 
 const getJson = function(url, errorMsg = 'Something went wrong!') {
     return fetch(url)
@@ -39,8 +39,8 @@ const getJson = function(url, errorMsg = 'Something went wrong!') {
         
         return response.json();
     });
-}
-*/
+};
+
 
 /* the old school way of using AJAX calls
 const getCountryAndNeighbour = function(country){
@@ -215,7 +215,7 @@ const whereAmI = async function() {
 whereAmI().then(city => console.log(city));
 console.log('FIRST');
 
-// iffy function
+// iife function
 
 (async function() {
     try {
@@ -226,5 +226,57 @@ console.log('FIRST');
     }
     console.log('3: finished getting location');
 })();
+*/
+
+/* Running promises in parallel
+const get3Countries = async function(c1, c2, c3) {
+    try {
+    //    const [data1] = await getJson(`https://restcountries.com/v2/name/${c1}`)
+    //    const [data2] = await getJson(`https://restcountries.com/v2/name/${c2}`)
+    //    const [data3] = await getJson(`https://restcountries.com/v2/name/${c3}`)
+
+       const data = await Promise.all([
+            getJson(`https://restcountries.com/v2/name/${c1}`),
+            getJson(`https://restcountries.com/v2/name/${c2}`),
+            getJson(`https://restcountries.com/v2/name/${c3}`)   
+        ])
+        console.log(data);
+        console.log(data.map(cap => cap[0].capital));
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+get3Countries('portugal', 'canada', 'germany');
+*/
+
+/* Promise methods
+// Promise.race: whatever promise finishes first will be the value for the promise regardless of resolution or rejection.
+(async function () {
+    const res = await Promise.race([
+        getJson(`https://restcountries.com/v2/name/japan`),
+        getJson(`https://restcountries.com/v2/name/greece`),
+        getJson(`https://restcountries.com/v2/name/austria`)
+    ]);
+    console.log(res[0]);
+}) ();
+
+// Promise.allSettled: returns an array of all settled promise regardless of rejection or resolution. 
+Promise.allSettled([
+    Promise.resolve('success'),
+    Promise.resolve('success'),
+    Promise.reject('ERROR'),
+    Promise.resolve('success'),
+]).then(res => console.log(res));
+
+// Promise.any: returns first fullfilled promise.
+Promise.any([
+    Promise.reject('ERROR'),
+    Promise.resolve('success'),
+    Promise.reject('ERROR'),
+    Promise.resolve('success'),
+])
+    .then(res => console.log(res))
+    .catch(err => console.log(err));
 */
 
